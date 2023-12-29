@@ -1,12 +1,16 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState, useEffect, useRef } from "react";
 import MovieCard from "./MovieCard";
+import { API_KEY } from "../utils/constant";
+import { useGenere } from "../hooks/useGenre";
 
 interface Movie {
   id: number;
   title: string;
+  backdrop_path: string;
+  overview: string;
+  genre_ids: string[];
 }
-
-const API_KEY = "2dca580c2a14b55200e784d157207b4d";
 
 const App: React.FC = () => {
   const [movieLists, setMovieLists] = useState<{
@@ -26,11 +30,14 @@ const App: React.FC = () => {
           const response = await fetch(
             `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&sort_by=popularity.desc&primary_release_year=${year}&page=1&vote_count.gte=100`
           );
-          const data = await response.json();
+          let data = await response.json();
+          if (data?.results?.length) data = useGenere(data.results);
+
+          //console.log(data);
 
           setMovieLists((prevMovieLists) => ({
             ...prevMovieLists,
-            [year]: data.results.length ? data.results : null,
+            [year]: data?.length ? data : null,
           }));
         }
       }
@@ -44,27 +51,34 @@ const App: React.FC = () => {
 
     const currentYear = years[years.length - 1];
 
+    // Scrolling down and reaching the bottom
     const bottom =
       scrollTop + window.innerHeight === document.documentElement.offsetHeight;
 
+    // Scrolling up and reaching the top
     const top = scrollTop === 0;
 
     if (bottom && !movieLists[currentYear]) {
       setYears((prevYears) => [...prevYears, currentYear + 1]);
-
+      // Smooth scroll down to the loader element
       const targetScroll = loader.current?.offsetTop || 0;
-      window.scrollTo({
-        top: targetScroll,
-        behavior: "smooth",
-      });
+      setTimeout(() => {
+        window.scrollTo({
+          top: targetScroll,
+          behavior: "smooth",
+        });
+      }, 50); // Adjust the delay as needed
     } else if (top && !movieLists[years[0] - 1]) {
       setYears((prevYears) => [years[0] - 1, ...prevYears]);
-
+      // Smooth scroll up to the loader element
       const targetScroll = loader.current?.offsetTop || 0;
-      window.scrollTo({
-        top: targetScroll,
-        behavior: "smooth",
-      });
+      const scrollDistance = scrollTop - targetScroll;
+      setTimeout(() => {
+        window.scrollTo({
+          top: scrollTop - scrollDistance * 0.1,
+          behavior: "smooth",
+        });
+      }, 50); // Adjust the delay as needed
     }
   };
 
@@ -75,14 +89,16 @@ const App: React.FC = () => {
     };
   }, [years]);
 
+  // console.log(movieLists);
+
   return (
     <div className="app">
       {years.map((year) => (
         <div key={year}>
           {movieLists[year] !== null ? (
             <>
-              <h1>{year}</h1>
-              <hr style={{ width: "80%", margin: "10px auto" }} />
+              <h1 className="movie-year">{year}</h1>
+
               <div className="movie-list">
                 {movieLists[year]?.map((movie) => (
                   <MovieCard key={movie.id} movie={movie} />

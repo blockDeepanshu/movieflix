@@ -5,19 +5,40 @@
 }
 
 .movie-card {
-  width: 200px;
-  height: 300px;
-  border: 2px solid black;
-  padding: 10px;
+  width: 400px;
+  height: 500px;
+  border: 2px solid red;
+  box-shadow: 10px 5px 5px red;
+
   margin: 10px;
   overflow: hidden;
+  border-radius: 20px;
+}
+
+.movie-card p,
+h2 {
+  padding: 10px;
 }
 
 .movie-card img {
-  width: 200px;
+  width: 400px;
 }
 
 .movie-list {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+}
+
+.genre-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.genre-title {
+  padding: 1px;
+  border: 1px solid white;
+  box-shadow: 4px 2px 2px white;
+  border-radius: 15px;
+  margin: 10px;
 }
