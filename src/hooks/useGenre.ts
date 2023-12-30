@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { GENERES } from "../utils/constant";
 
 

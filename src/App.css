@@ -42,3 +42,22 @@ h2 {
   border-radius: 15px;
   margin: 10px;
 }
+
+.genre-buttons button {
+  padding: 7px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.genre-container {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.active {
+  color: white;
+  background-color: red;
+}

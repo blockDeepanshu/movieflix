@@ -21,8 +21,8 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
       <h2>{movie.title}</h2>
       <p>{movie.overview.slice(0, 150)}.....</p>
       <div className="genre-list">
-        {movie.genre_ids.map((item) => (
-          <MovieGenre title={item} />
+        {movie.genre_ids.map((item, i) => (
+          <MovieGenre title={item} key={i} />
         ))}
       </div>
     </div>
