@@ -1,10 +1,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-
+// MovieList.tsx
 import React, { useState, useEffect, useRef } from "react";
 import MovieCard from "./MovieCard";
 import GenreFilter from "./GenreFilter";
 import { useGenere } from "../hooks/useGenre";
 import { API_KEY } from "../utils/constant";
+
+interface MovieListProps {
+  searchQuery: string;
+}
 
 interface Movie {
   id: number;
@@ -14,7 +18,7 @@ interface Movie {
   genre_ids: string[];
 }
 
-const MovieList: React.FC = () => {
+const MovieList: React.FC<MovieListProps> = ({ searchQuery }) => {
   const [movieLists, setMovieLists] = useState<{
     [year: number]: Movie[] | null;
   }>({});
@@ -26,14 +30,14 @@ const MovieList: React.FC = () => {
   useEffect(() => {
     fetchMovies();
     fetchGenres();
-  }, [years]);
+  }, [years, searchQuery]);
 
   const fetchMovies = async () => {
     try {
       for (const year of years) {
         if (!movieLists[year]) {
           const response = await fetch(
-            `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&sort_by=popularity.desc&primary_release_year=${year}&page=1&vote_count.gte=100`
+            `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&sort_by=popularity.desc&primary_release_year=${year}&page=1&vote_count.gte=100&query=${searchQuery}`
           );
           let data = await response.json();
           if (data?.results) data = useGenere(data?.results);
@@ -80,12 +84,8 @@ const MovieList: React.FC = () => {
     // Scrolling up and reaching the top
     const top = scrollTop === 0;
 
-    console.log("botton", bottom);
-
     if (bottom && !movieLists[currentYear]) {
       setYears((prevYears) => [...prevYears, currentYear + 1]);
-
-      console.log("inside bottom");
 
       const targetScroll = loader.current?.offsetTop || 0;
       const scrollDistance = scrollTop - targetScroll;
@@ -114,19 +114,24 @@ const MovieList: React.FC = () => {
   };
 
   const filterMoviesByGenre = (movies: Movie[]) => {
-    //console.log("movies", movies);
-    if (selectedGenres.length === 0) {
+    if (selectedGenres.length === 0 && !searchQuery) {
       return movies;
     }
-    const filteredMovies = movies?.filter((movie) =>
-      movie.genre_ids.some((id) => selectedGenres.includes(id))
-    );
+
+    const filteredMovies = movies?.filter((movie) => {
+      const matchesGenre =
+        selectedGenres.length === 0 ||
+        movie.genre_ids.some((id) => selectedGenres.includes(id));
+
+      const matchesSearch =
+        !searchQuery ||
+        movie.title.toLowerCase().includes(searchQuery.toLowerCase());
+
+      return matchesGenre && matchesSearch;
+    });
 
     return filteredMovies;
-    // console.log("filertd", filteredMovies);
   };
-
-  // console.log("selected", selectedGenres);
 
   return (
     <div className="app">
@@ -142,12 +147,25 @@ const MovieList: React.FC = () => {
         <div key={year}>
           {movieLists[year] !== null ? (
             <>
-              <h1 style={{ textAlign: "center", marginTop: "10px" }}>{year}</h1>
+              <h1
+                style={{
+                  textAlign: "center",
+                  marginTop: "10px",
+                }}
+              >
+                {year}
+              </h1>
 
               <div className="movie-list">
-                {filterMoviesByGenre(movieLists[year]!)?.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
-                ))}
+                {filterMoviesByGenre(movieLists[year]!)?.length > 0 ? (
+                  filterMoviesByGenre(movieLists[year]!)?.map((movie) => (
+                    <MovieCard key={movie.id} movie={movie} />
+                  ))
+                ) : (
+                  <h1 style={{ color: "white", textAlign: "center" }}>
+                    No Movies to display
+                  </h1>
+                )}
               </div>
             </>
           ) : (

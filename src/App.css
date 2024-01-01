@@ -2,6 +2,15 @@
   background-color: black;
   color: red;
   padding: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.header input {
+  padding: 20px;
+  width: 20%;
+  border-radius: 15px;
 }
 
 .movie-card {

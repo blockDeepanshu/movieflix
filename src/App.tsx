@@ -1,14 +1,21 @@
+import React, { useState } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import MovieList from "./components/MovieList";
 
-function App() {
+const App: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
   return (
-    <>
-      <Header />
-      <MovieList />
-    </>
+    <div style={{ minHeight: "500px" }}>
+      <Header onSearch={handleSearch} />
+      <MovieList searchQuery={searchQuery} />
+    </div>
   );
-}
+};
 
 export default App;
