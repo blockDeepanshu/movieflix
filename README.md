@@ -1,30 +1,42 @@
-# React + TypeScript + Vite
+# MovieList Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+This project is a movie listing application that allows users to explore movies based on release years, genres, and search for specific movies.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Requirements
 
-## Expanding the ESLint configuration
+### Covered
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Fetch and display movies based on release years.
+- Filter movies by genres.
+- Infinite scrolling for loading more movies.
+- Responsive design for a better user experience.
+- Search box to search movies from movie title.
 
-- Configure the top-level `parserOptions` property like this:
+### Not Covered
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+- Not displaying Cast and Crew details
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Getting Started
+
+Follow the steps below to run the project locally:
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/blockDeepanshu/movieflix.git
+   ```
+
+2. **Install dependencies:**
+
+   ```bash
+   cd movieflix
+   npm install
+
+   ```
+
+3. **Run the application:**
+   ```bash
+   npm run dev
+   ```
